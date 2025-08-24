@@ -1,0 +1,47 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: "AuthenticationApi"
+  devtools:
+    add-properties: false
+
+logging:
+  level:
+    org:
+      springframework:
+        web: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,prometheus"
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+cors:
+  allowed-origins: "http://localhost:4200,http://localhost:8080"
+
+routes:
+  user:
+    paths:
+      signUp: "/api/v1/user"
+  auth:
+    paths:
+      login: "/auth/v1/login"
+
+adapters:
+  r2dbc:
+    host: "localhost"
+    port: 5432
+    database: "postgres"
+    schema: "public"
+    username: "postgres"
+    password: "postgres"
+
+jwt:
+  secret: "EstaEsUnaClaveSecretaMuyLargaParaQueSeaSeguraYCumplaConLosRequisitosDelAlgoritmoHS256"
+  expiration: 600000
