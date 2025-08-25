@@ -15,7 +15,8 @@ import java.util.logging.Logger;
 @Component
 public class JwtProvider {
 
-  private static final Logger LOGGER = Logger.getLogger(JwtProvider.class.getName());
+  private static final Logger LOG = Logger.getLogger(JwtProvider.class.getName());
+
   @Value("${jwt.secret}")
   private String secret;
   @Value("${jwt.expiration}")
@@ -33,29 +34,24 @@ public class JwtProvider {
   }
 
   public Claims getClaims(String token) {
+    validate(token);
     return Jwts.parser().verifyWith(getKey(secret)).build().parseSignedClaims(token).getPayload();
   }
 
-  public String getSubject(String token) {
-    return Jwts.parser().verifyWith(getKey(secret)).build().parseSignedClaims(token).getPayload().getSubject();
-  }
-
-  public boolean validate(String token) {
+  public void validate(String token) {
     try {
       Jwts.parser().verifyWith(getKey(secret)).build().parseSignedClaims(token).getPayload().getSubject();
-      return true;
     } catch (ExpiredJwtException e) {
-      LOGGER.severe("token expired");
+      LOG.severe("token expired");
     } catch (UnsupportedJwtException e) {
-      LOGGER.severe("token unsupported");
+      LOG.severe("token unsupported");
     } catch (MalformedJwtException e) {
-      LOGGER.severe("token malformed");
+      LOG.severe("token malformed");
     } catch (SignatureException e) {
-      LOGGER.severe("bad signature");
+      LOG.severe("bad signature");
     } catch (IllegalArgumentException e) {
-      LOGGER.severe("illegal args");
+      LOG.severe("illegal args");
     }
-    return false;
   }
 
   private SecretKey getKey(String secret) {

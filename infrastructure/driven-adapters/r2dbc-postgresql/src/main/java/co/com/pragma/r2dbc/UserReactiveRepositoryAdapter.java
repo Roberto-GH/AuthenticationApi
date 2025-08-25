@@ -5,10 +5,11 @@ import co.com.pragma.api.jwt.JwtProvider;
 import co.com.pragma.model.user.Token;
 import co.com.pragma.model.user.User;
 import co.com.pragma.model.user.UserLogin;
+import co.com.pragma.model.user.exception.UserException;
 import co.com.pragma.model.user.gateways.UserRepository;
 import co.com.pragma.r2dbc.helper.ReactiveAdapterOperations;
-import lombok.extern.slf4j.Slf4j;
 import org.reactivecommons.utils.ObjectMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
@@ -16,7 +17,6 @@ import reactor.core.publisher.Mono;
 import java.util.UUID;
 
 @Repository
-@Slf4j
 public class UserReactiveRepositoryAdapter extends ReactiveAdapterOperations<User, UserEntity, UUID, UserReactiveRepository>
   implements UserRepository {
 
@@ -26,7 +26,7 @@ public class UserReactiveRepositoryAdapter extends ReactiveAdapterOperations<Use
 
   public UserReactiveRepositoryAdapter(UserReactiveRepository repository, ObjectMapper mapper, PasswordEncoder passwordEncoder, JwtProvider jwtProvider,
                                        RoleReactiveRepositoryAdapter roleReactiveRepositoryAdapter) {
-    super(repository, mapper, entity -> mapper.map(entity, User.class));
+    super(repository, mapper, entity -> mapper.mapBuilder(entity, User.Builder.class).build());
     this.passwordEncoder = passwordEncoder;
     this.jwtProvider = jwtProvider;
     this.roleReactiveRepositoryAdapter = roleReactiveRepositoryAdapter;
@@ -48,7 +48,7 @@ public class UserReactiveRepositoryAdapter extends ReactiveAdapterOperations<Use
   public Mono<Token> getToken(UserLogin userLogin) {
     return this
       .findByEmail(userLogin.getEmail())
-      .switchIfEmpty(Mono.error(new Exception("Usuario con Email " + userLogin.getEmail() + " no existe")))
+      .switchIfEmpty(Mono.error(new UserException("User with email " + userLogin.getEmail() + " does not exist", HttpStatus.BAD_REQUEST.value())))
       .filter(user -> passwordEncoder.matches(userLogin.getPassword(), user.getPassword()))
       .flatMap(user -> roleReactiveRepositoryAdapter
         .findById(user.getRolId())

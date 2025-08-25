@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.reactive.TransactionalOperator;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
@@ -19,11 +20,13 @@ public class UserHandler {
   private final UserControllerUseCase userControllerUseCase;
   private final UserDtoMapper userDtoMapper;
   private final PasswordEncoder passwordEncoder;
+  private final TransactionalOperator transactionalOperator;
 
-  public UserHandler(UserControllerUseCase userControllerUseCase, UserDtoMapper userDtoMapper, PasswordEncoder passwordEncoder) {
+  public UserHandler(UserControllerUseCase userControllerUseCase, UserDtoMapper userDtoMapper, PasswordEncoder passwordEncoder, TransactionalOperator transactionalOperator) {
     this.userControllerUseCase = userControllerUseCase;
     this.userDtoMapper = userDtoMapper;
     this.passwordEncoder = passwordEncoder;
+    this.transactionalOperator = transactionalOperator;
   }
 
   @PreAuthorize("hasRole('ADMIN')")
@@ -31,12 +34,11 @@ public class UserHandler {
     return serverRequest
       .bodyToMono(CreateUserDto.class)
       .map(dto -> {
-        User user = userDtoMapper.toModel(dto);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRolId(2L);
-        return user;
+        User.Builder userBuilder = userDtoMapper.toModel(dto);
+        userBuilder.password(passwordEncoder.encode(dto.password()));
+        return userBuilder.build();
       })
-      .flatMap(userControllerUseCase::saveUser)
+      .flatMap(user -> userControllerUseCase.saveUser(user).as(transactionalOperator::transactional))
       .map(userDtoMapper::toResponseDto)
       .flatMap(reponseUser -> ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).bodyValue(reponseUser));
   }

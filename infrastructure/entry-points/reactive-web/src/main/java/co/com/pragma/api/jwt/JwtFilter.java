@@ -1,37 +1,34 @@
 package co.com.pragma.api.jwt;
 
-import lombok.extern.slf4j.Slf4j;
+import co.com.pragma.api.exception.AuthenticationApiException;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
+import reactor.util.annotation.NonNull;
 
 @Component
-@Slf4j
 public class JwtFilter implements WebFilter {
 
   @Override
-  public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
+  @NonNull
+  public Mono<Void> filter(ServerWebExchange exchange, @NonNull WebFilterChain chain) {
     ServerHttpRequest request = exchange.getRequest();
     String path = request.getPath().value();
-
-    //---------
-    /*if(path.contains("api"))
-      return chain.filter(exchange);*/
-    //----------
-
     if(path.contains("auth"))
       return chain.filter(exchange);
     String auth = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
     if(auth == null)
-      return Mono.error(new Throwable("no token was found"));
+      return Mono.error(new AuthenticationApiException("No token was found", HttpStatus.UNAUTHORIZED));
     if(!auth.startsWith("Bearer "))
-      return Mono.error(new Throwable("invalid auth"));
+      return Mono.error(new AuthenticationApiException("Invalid auth", HttpStatus.UNAUTHORIZED));
     String token = auth.replace("Bearer ", "");
     exchange.getAttributes().put("token", token);
     return chain.filter(exchange);
   }
+
 }
