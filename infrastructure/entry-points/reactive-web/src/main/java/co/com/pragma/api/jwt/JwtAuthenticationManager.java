@@ -1,6 +1,7 @@
 package co.com.pragma.api.jwt;
 
-import lombok.extern.slf4j.Slf4j;
+import co.com.pragma.api.exception.AuthenticationApiException;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -13,7 +14,6 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 @Component
-@Slf4j
 public class JwtAuthenticationManager implements ReactiveAuthenticationManager {
 
   private final JwtProvider jwtProvider;
@@ -26,7 +26,7 @@ public class JwtAuthenticationManager implements ReactiveAuthenticationManager {
   public Mono<Authentication> authenticate(Authentication authentication) {
     return Mono.just(authentication)
       .map(auth -> jwtProvider.getClaims(auth.getCredentials().toString()))
-      .onErrorResume(e -> Mono.error(new Throwable("bad token")))
+      .onErrorResume(e -> Mono.error(new AuthenticationApiException("Bad token", HttpStatus.UNAUTHORIZED)))
       .map(claims -> new UsernamePasswordAuthenticationToken(
         claims.getSubject(),
         null,
@@ -38,4 +38,5 @@ public class JwtAuthenticationManager implements ReactiveAuthenticationManager {
           .toList())
       );
   }
+
 }

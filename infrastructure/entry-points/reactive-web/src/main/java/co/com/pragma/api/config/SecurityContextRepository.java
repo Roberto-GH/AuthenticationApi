@@ -1,6 +1,8 @@
 package co.com.pragma.api.config;
 
 import co.com.pragma.api.jwt.JwtAuthenticationManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextImpl;
@@ -9,8 +11,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+
 @Component
 public class SecurityContextRepository implements ServerSecurityContextRepository {
+
+  private static final Logger LOG = LoggerFactory.getLogger(SecurityContextRepository.class);
 
   private final JwtAuthenticationManager jwtAuthenticationManager;
 
@@ -26,6 +31,7 @@ public class SecurityContextRepository implements ServerSecurityContextRepositor
   @Override
   public Mono<SecurityContext> load(ServerWebExchange exchange) {
     String token = exchange.getAttribute("token");
+    LOG.debug("Processing data: {}", token);
     return jwtAuthenticationManager.authenticate(new UsernamePasswordAuthenticationToken(token, token))
       .map(SecurityContextImpl::new);
   }

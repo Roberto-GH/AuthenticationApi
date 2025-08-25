@@ -10,4 +10,5 @@ dependencies {
     implementation "io.jsonwebtoken:jjwt-api:$jwtVersion"
     runtimeOnly "io.jsonwebtoken:jjwt-impl:$jwtVersion"
     runtimeOnly "io.jsonwebtoken:jjwt-jackson:$jwtVersion"
+    implementation "org.springframework:spring-tx:$txVersion"
 }
