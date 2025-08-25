@@ -12,7 +12,7 @@ import co.com.pragma.model.validation.Specification;
 import co.com.pragma.usecase.user.adapters.UserControllerUseCase;
 import reactor.core.publisher.Mono;
 
-public class UserUseCase implements UserControllerUseCase {
+public class  UserUseCase implements UserControllerUseCase {
 
   private static final Specification<String> FIRST_NAME_NOT_EMPTY = new NotEmptySpecification("firstName");
   private static final Specification<String> LAST_NAME_NOT_EMPTY = new NotEmptySpecification("lastName");
