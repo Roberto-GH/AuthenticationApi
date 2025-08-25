@@ -4,6 +4,7 @@ import co.com.pragma.api.dto.CreateUserDto;
 import co.com.pragma.api.dto.LoginDto;
 import co.com.pragma.api.mapper.UserDtoMapper;
 import co.com.pragma.model.user.User;
+import co.com.pragma.model.user.exception.UserException;
 import co.com.pragma.usecase.user.adapters.UserControllerUseCase;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,6 +34,7 @@ public class UserHandler {
   public Mono<ServerResponse> listenSaveUser(ServerRequest serverRequest) {
     return serverRequest
       .bodyToMono(CreateUserDto.class)
+      .switchIfEmpty(Mono.error(new UserException("User data is required", 400)))
       .map(dto -> {
         User.Builder userBuilder = userDtoMapper.toModel(dto);
         userBuilder.password(passwordEncoder.encode(dto.password()));
@@ -46,6 +48,7 @@ public class UserHandler {
   public Mono<ServerResponse> listenLogin(ServerRequest serverRequest) {
     return serverRequest
       .bodyToMono(LoginDto.class)
+      .switchIfEmpty(Mono.error(new UserException("Login data is required", 400)))
       .map(userDtoMapper::toUserLogin)
       .flatMap(userControllerUseCase::login)
       .flatMap(token -> ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).bodyValue(token));

@@ -22,8 +22,16 @@ public class SecurityConfig {
   public SecurityWebFilterChain filterChain(ServerHttpSecurity http, JwtFilter jwtFilter) {
     return http
       .csrf(ServerHttpSecurity.CsrfSpec::disable)
-      .authorizeExchange(exchangeSpec -> exchangeSpec.pathMatchers("/auth/**").permitAll()
-        .anyExchange().authenticated())
+      .authorizeExchange(exchangeSpec -> exchangeSpec
+        .pathMatchers(
+          "/auth/**",
+          "/swagger-ui.html",
+          "/swagger-ui/**",
+          "/v3/api-docs/**",
+          "/webjars/swagger-ui/**"
+        ).permitAll()
+        .anyExchange()
+        .authenticated())
       .addFilterAfter(jwtFilter, SecurityWebFiltersOrder.FIRST)
       .securityContextRepository(securityContextRepository)
       .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)

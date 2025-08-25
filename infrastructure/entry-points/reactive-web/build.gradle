@@ -11,4 +11,5 @@ dependencies {
     runtimeOnly "io.jsonwebtoken:jjwt-impl:$jwtVersion"
     runtimeOnly "io.jsonwebtoken:jjwt-jackson:$jwtVersion"
     implementation "org.springframework:spring-tx:$txVersion"
+    implementation "org.springdoc:springdoc-openapi-starter-webflux-ui:$openApiVersion"
 }

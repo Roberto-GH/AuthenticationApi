@@ -50,6 +50,7 @@ public class UserReactiveRepositoryAdapter extends ReactiveAdapterOperations<Use
       .findByEmail(userLogin.getEmail())
       .switchIfEmpty(Mono.error(new UserException("User with email " + userLogin.getEmail() + " does not exist", HttpStatus.BAD_REQUEST.value())))
       .filter(user -> passwordEncoder.matches(userLogin.getPassword(), user.getPassword()))
+      .switchIfEmpty(Mono.error(new UserException("Invalid credentials", HttpStatus.UNAUTHORIZED.value())))
       .flatMap(user -> roleReactiveRepositoryAdapter
         .findById(user.getRolId())
         .map(role -> UserDetailsDto.builder()

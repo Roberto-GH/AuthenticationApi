@@ -9,6 +9,7 @@ buildscript {
     mapstructVersion = '1.6.3'
     jwtVersion = '0.13.0'
     txVersion = '6.2.9'
+    openApiVersion = '2.8.11'
   }
 }
 
