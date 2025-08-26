@@ -43,5 +43,5 @@ adapters:
     password: "postgres"
 
 jwt:
-  secret: "EstaEsUnaClaveSecretaMuyLargaParaQueSeaSeguraYCumplaConLosRequisitosDelAlgoritmoHS256"
+  secret: "EstaEsUnaClaveSecretaMuyLargaParaQueSeaSeguraYCumplaConLosRequisitosDelAlgoritmo"
   expiration: 600000
