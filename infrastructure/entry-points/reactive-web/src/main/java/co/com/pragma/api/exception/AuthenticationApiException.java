@@ -1,16 +1,16 @@
 package co.com.pragma.api.exception;
 
-import lombok.Getter;
-import org.springframework.http.HttpStatus;
+import co.com.pragma.model.user.exception.CustomException;
+import co.com.pragma.model.user.exception.ErrorEnum;
 
-@Getter
-public class AuthenticationApiException extends Exception {
+public class AuthenticationApiException extends CustomException {
 
-  private final HttpStatus status;
+  public AuthenticationApiException(ErrorEnum errorEnum) {
+    super(errorEnum);
+  }
 
-  public AuthenticationApiException(String message, HttpStatus status) {
-    super(message);
-    this.status = status;
+  public AuthenticationApiException(ErrorEnum errorEnum, String customMessage) {
+    super(errorEnum, customMessage);
   }
 
 }

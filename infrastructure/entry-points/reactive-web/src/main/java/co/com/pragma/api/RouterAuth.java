@@ -1,6 +1,7 @@
 package co.com.pragma.api;
 
 import co.com.pragma.api.config.AuthPath;
+import co.com.pragma.api.constans.AuthenticationWebKeys;
 import co.com.pragma.api.dto.LoginDto;
 import co.com.pragma.model.user.Token;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,31 +24,29 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 public class RouterAuth {
 
   private final AuthPath authPath;
-  private final UserHandler userHandler;
 
-  public RouterAuth(AuthPath authPath, UserHandler userHandler) {
+  public RouterAuth(AuthPath authPath) {
     this.authPath = authPath;
-    this.userHandler = userHandler;
   }
 
   @RouterOperations({
     @RouterOperation(
-      path = "/auth/v1/login",
+      path = AuthenticationWebKeys.OPEN_API_APPLICATION_PATH_AUTH,
       method = RequestMethod.POST,
       beanClass = UserHandler.class,
-      beanMethod = "listenLogin",
+      beanMethod = AuthenticationWebKeys.OPEN_API_BEAN_METHOD_AUTH,
       operation = @Operation(
-        operationId = "login", responses = {
+        operationId = AuthenticationWebKeys.OPEN_API_OPERATION_ID_AUTH, responses = {
         @ApiResponse(
-          responseCode = "200",
-          description = "Successful operation",
-          content = @Content(mediaType = "application/json", schema = @Schema(implementation = Token.class)))
+          responseCode = AuthenticationWebKeys.OPEN_API_RESPONSE_CODE,
+          description = AuthenticationWebKeys.OPEN_API_DESCRIPTION_SUCCESS,
+          content = @Content(mediaType = AuthenticationWebKeys.OPEN_API_MEDIA_TYPE, schema = @Schema(implementation = Token.class)))
       },
         requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = LoginDto.class)))
       ))
   })
   @Bean
-  public RouterFunction<ServerResponse> routerFunctionAuth() {
+  public RouterFunction<ServerResponse> routerFunctionAuth(UserHandler userHandler) {
     return route(POST(authPath.getLogin()), userHandler::listenLogin);
   }
 

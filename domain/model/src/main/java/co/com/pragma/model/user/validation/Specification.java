@@ -1,4 +1,6 @@
-package co.com.pragma.model.validation;
+package co.com.pragma.model.user.validation;
+
+import co.com.pragma.model.user.exception.DomainValidationException;
 
 /**
  * @param <T> El tipo de objeto a validar.

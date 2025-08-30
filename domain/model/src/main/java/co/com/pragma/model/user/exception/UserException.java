@@ -3,13 +3,14 @@ package co.com.pragma.model.user.exception;
 import lombok.Getter;
 
 @Getter
-public class UserException extends Exception {
+public class UserException extends CustomException {
 
-  private final int status;
+  public UserException(ErrorEnum errorEnum) {
+    super(errorEnum);
+  }
 
-  public UserException(String message, int status) {
-    super(message);
-    this.status = status;
+  public UserException(ErrorEnum errorEnum, String customMessage) {
+    super(errorEnum, customMessage);
   }
 
 }
