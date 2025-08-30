@@ -8,7 +8,7 @@ public record CreateUserDto(
   String lastName,
   String secondLastName,
   String email,
-  String password, // Added password
+  String password,
   Long identityDocument,
   LocalDate birthdate,
   String address,

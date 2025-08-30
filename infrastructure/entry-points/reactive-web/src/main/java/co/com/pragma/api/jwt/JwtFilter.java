@@ -1,8 +1,9 @@
 package co.com.pragma.api.jwt;
 
+import co.com.pragma.api.constans.AuthenticationWebKeys;
 import co.com.pragma.api.exception.AuthenticationApiException;
+import co.com.pragma.model.user.exception.ErrorEnum;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
@@ -19,15 +20,16 @@ public class JwtFilter implements WebFilter {
   public Mono<Void> filter(ServerWebExchange exchange, @NonNull WebFilterChain chain) {
     ServerHttpRequest request = exchange.getRequest();
     String path = request.getPath().value();
-    if(path.contains("auth") || path.contains("swagger") || path.contains("v3/api-docs") || path.contains("webjars"))
+    if (path.contains(AuthenticationWebKeys.STRING_AUTH) || path.contains(AuthenticationWebKeys.STRING_SWAGGER) || path.contains(AuthenticationWebKeys.STRING_DOCS) ||
+        path.contains(AuthenticationWebKeys.STRING_WEBJARS))
       return chain.filter(exchange);
     String auth = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
     if(auth == null)
-      return Mono.error(new AuthenticationApiException("No token was found", HttpStatus.UNAUTHORIZED));
-    if(!auth.startsWith("Bearer "))
-      return Mono.error(new AuthenticationApiException("Invalid auth", HttpStatus.UNAUTHORIZED));
-    String token = auth.replace("Bearer ", "");
-    exchange.getAttributes().put("token", token);
+      return Mono.error(new AuthenticationApiException(ErrorEnum.INVALID_TOKEN, AuthenticationWebKeys.NO_TOKEN));
+    if(!auth.startsWith(AuthenticationWebKeys.BEARER))
+      return Mono.error(new AuthenticationApiException(ErrorEnum.INVALID_TOKEN, AuthenticationWebKeys.INVALID_TOKEN));
+    String token = auth.replace(AuthenticationWebKeys.BEARER, AuthenticationWebKeys.STRING_BLANK);
+    exchange.getAttributes().put(AuthenticationWebKeys.TOKEN, token);
     return chain.filter(exchange);
   }
 

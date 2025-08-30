@@ -1,4 +1,7 @@
-package co.com.pragma.model.validation;
+package co.com.pragma.model.user.validation;
+
+import co.com.pragma.model.user.exception.DomainValidationException;
+import co.com.pragma.model.user.exception.ErrorEnum;
 
 public class AmountInRangeSpecification implements Specification<Long> {
 
@@ -15,10 +18,10 @@ public class AmountInRangeSpecification implements Specification<Long> {
   @Override
   public void validate(Long candidate) throws DomainValidationException {
     if (candidate == null) {
-      throw new DomainValidationException("The amount '" + fieldName + "' cannot be null.", 400);
+      throw new DomainValidationException(ErrorEnum.INVALID_USER_DATA, "The amount '" + fieldName + "' cannot be null.");
     }
     if (candidate.compareTo(min) < 0 || candidate.compareTo(max) > 0) {
-      throw new DomainValidationException("The amount '" + fieldName + "' must be between " + min + " and " + max + ".", 400);
+      throw new DomainValidationException(ErrorEnum.INVALID_USER_DATA, "The amount '" + fieldName + "' must be between " + min + " and " + max + ".");
     }
   }
 

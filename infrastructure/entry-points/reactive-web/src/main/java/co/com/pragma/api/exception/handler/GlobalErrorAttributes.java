@@ -1,8 +1,8 @@
 package co.com.pragma.api.exception.handler;
 
-import co.com.pragma.api.exception.AuthenticationApiException;
-import co.com.pragma.model.user.exception.UserException;
-import co.com.pragma.model.validation.DomainValidationException;
+import co.com.pragma.api.constans.AuthenticationWebKeys;
+import co.com.pragma.model.user.exception.CustomException;
+import co.com.pragma.model.user.exception.ErrorEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
@@ -23,24 +23,15 @@ public class GlobalErrorAttributes extends DefaultErrorAttributes {
   public Map<String, Object> getErrorAttributes(ServerRequest request, ErrorAttributeOptions options) {
     Map<String, Object> errorMap = new HashMap<>();
     Throwable error = getError(request);
-    errorMap.put("message", error.getMessage());
-    errorMap.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
-    errorMap.put("error", HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
-    errorMap.put("path", request.path());
-    if (error instanceof AuthenticationApiException apiException) {
-      errorMap.put("message", apiException.getMessage());
-      errorMap.put("status", apiException.getStatus().value());
-      errorMap.put("error", apiException.getStatus().getReasonPhrase());
-    }
-    if (error instanceof UserException apiException) {
-      errorMap.put("message", apiException.getMessage());
-      errorMap.put("status", HttpStatus.valueOf(apiException.getStatus()).value());
-      errorMap.put("error", HttpStatus.valueOf(apiException.getStatus()).getReasonPhrase());
-    }
-    if (error instanceof DomainValidationException domainException) {
-      errorMap.put("message", domainException.getMessage());
-      errorMap.put("status", HttpStatus.valueOf(domainException.getStatus()).value());
-      errorMap.put("error", HttpStatus.valueOf(domainException.getStatus()).getReasonPhrase());
+    errorMap.put(AuthenticationWebKeys.ERROR_ATTRIBUTE_MESSAGE, ErrorEnum.INTERNAL_SERVER_ERROR.getDefaultMessage());
+    errorMap.put(AuthenticationWebKeys.ERROR_ATTRIBUTE_ERROR_CODE, ErrorEnum.INTERNAL_SERVER_ERROR.getCode());
+    errorMap.put(AuthenticationWebKeys.ERROR_ATTRIBUTE_ERROR, HttpStatus.valueOf(ErrorEnum.INTERNAL_SERVER_ERROR.getStatus()));
+    errorMap.put(AuthenticationWebKeys.ERROR_ATTRIBUTE_PATH, request.path());
+    if (error instanceof CustomException apiException) {
+      errorMap.put(AuthenticationWebKeys.ERROR_ATTRIBUTE_MESSAGE, apiException.getMessage());
+      errorMap.put(AuthenticationWebKeys.ERROR_ATTRIBUTE_ERROR_CODE, apiException.getErrorCode());
+      errorMap.put(AuthenticationWebKeys.ERROR_ATTRIBUTE_ERROR, HttpStatus.valueOf(apiException.getStatus()).getReasonPhrase());
+      errorMap.put(AuthenticationWebKeys.ERROR_ATTRIBUTE_PATH, request.path());
     }
     LOG.error(error.getMessage());
     return errorMap;

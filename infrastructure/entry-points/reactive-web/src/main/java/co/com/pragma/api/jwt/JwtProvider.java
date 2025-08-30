@@ -1,5 +1,6 @@
 package co.com.pragma.api.jwt;
 
+import co.com.pragma.api.constans.AuthenticationWebKeys;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -17,10 +18,16 @@ public class JwtProvider {
 
   private static final Logger LOG = Logger.getLogger(JwtProvider.class.getName());
 
-  @Value("${jwt.secret}")
-  private String secret;
-  @Value("${jwt.expiration}")
-  private Integer expiration;
+  private final String secret;
+  private final Integer expiration;
+
+  public JwtProvider(
+          @Value("${jwt.secret}") String secret,
+          @Value("${jwt.expiration}") Integer expiration
+  ) {
+    this.secret = secret;
+    this.expiration = expiration;
+  }
 
   public String generateToken(UserDetails userDetails) {
     return Jwts
@@ -42,15 +49,13 @@ public class JwtProvider {
     try {
       Jwts.parser().verifyWith(getKey(secret)).build().parseSignedClaims(token).getPayload().getSubject();
     } catch (ExpiredJwtException e) {
-      LOG.severe("token expired");
-    } catch (UnsupportedJwtException e) {
-      LOG.severe("token unsupported");
+      LOG.severe(AuthenticationWebKeys.TOKEN_EXPIRED);
     } catch (MalformedJwtException e) {
-      LOG.severe("token malformed");
+      LOG.severe(AuthenticationWebKeys.TOKEN_MALFORMED);
     } catch (SignatureException e) {
-      LOG.severe("bad signature");
+      LOG.severe(AuthenticationWebKeys.BAD_SIGNATURE);
     } catch (IllegalArgumentException e) {
-      LOG.severe("illegal args");
+      LOG.severe(AuthenticationWebKeys.ILLEGAL_ARGS);
     }
   }
 

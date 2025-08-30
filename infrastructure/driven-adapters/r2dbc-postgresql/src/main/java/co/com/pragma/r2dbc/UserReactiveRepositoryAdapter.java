@@ -5,6 +5,7 @@ import co.com.pragma.api.jwt.JwtProvider;
 import co.com.pragma.model.user.Token;
 import co.com.pragma.model.user.User;
 import co.com.pragma.model.user.UserLogin;
+import co.com.pragma.model.user.exception.ErrorEnum;
 import co.com.pragma.model.user.exception.UserException;
 import co.com.pragma.model.user.gateways.UserRepository;
 import co.com.pragma.r2dbc.helper.ReactiveAdapterOperations;
@@ -48,9 +49,9 @@ public class UserReactiveRepositoryAdapter extends ReactiveAdapterOperations<Use
   public Mono<Token> getToken(UserLogin userLogin) {
     return this
       .findByEmail(userLogin.getEmail())
-      .switchIfEmpty(Mono.error(new UserException("User with email " + userLogin.getEmail() + " does not exist", HttpStatus.BAD_REQUEST.value())))
+      .switchIfEmpty(Mono.error(new UserException(ErrorEnum.INVALID_USER_DATA, "User with email " + userLogin.getEmail() + " does not exist")))
       .filter(user -> passwordEncoder.matches(userLogin.getPassword(), user.getPassword()))
-      .switchIfEmpty(Mono.error(new UserException("Invalid credentials", HttpStatus.UNAUTHORIZED.value())))
+      .switchIfEmpty(Mono.error(new UserException(ErrorEnum.INVALID_USER_DATA, "Invalid credentials")))
       .flatMap(user -> roleReactiveRepositoryAdapter
         .findById(user.getRolId())
         .map(role -> UserDetailsDto.builder()

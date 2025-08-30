@@ -1,51 +1,34 @@
 package co.com.pragma.config;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.mockito.Mockito;
 import co.com.pragma.model.user.gateways.UserRepository;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContext;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
-public class UseCasesConfigTest {
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-    @Test
-    void testUseCaseBeansExist() {
-        try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(TestConfig.class)) {
-            String[] beanNames = context.getBeanDefinitionNames();
+@SpringBootTest(classes = UseCasesConfig.class)
+class UseCasesConfigTest {
 
-            boolean useCaseBeanFound = false;
-            for (String beanName : beanNames) {
-                if (beanName.endsWith("UseCase")) {
-                    useCaseBeanFound = true;
-                    break;
-                }
-            }
+  @Autowired
+  private ApplicationContext context;
 
-            assertTrue(useCaseBeanFound, "No beans ending with 'Use Case' were found");
-        }
+  @MockitoBean
+  private UserRepository userRepository;
+
+  @Test
+  void testUseCaseBeansExist() {
+    String[] beanNames = context.getBeanDefinitionNames();
+    boolean useCaseBeanFound = false;
+    for (String beanName : beanNames) {
+      if (beanName.endsWith("UseCase")) {
+        useCaseBeanFound = true;
+        assertNotNull(context.getBean(beanName));
+      }
     }
-
-    @Configuration
-    @Import(UseCasesConfig.class)
-    static class TestConfig {
-
-        @Bean
-        public MyUseCase myUseCase() {
-            return new MyUseCase();
-        }
-
-        @Bean
-        public UserRepository userRepository() {
-            return Mockito.mock(UserRepository.class);
-        }
-    }
-
-    static class MyUseCase {
-        public String execute() {
-            return "MyUseCase Test";
-        }
-    }
+    assertTrue(useCaseBeanFound, "No UseCase beans found in the context");
+  }
 }

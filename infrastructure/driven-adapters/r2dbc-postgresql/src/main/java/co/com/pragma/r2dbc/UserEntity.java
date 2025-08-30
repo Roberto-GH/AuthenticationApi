@@ -1,5 +1,6 @@
 package co.com.pragma.r2dbc;
 
+import co.com.pragma.r2dbc.constants.PostgreSQLKeys;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +12,7 @@ import org.springframework.data.relational.core.mapping.Table;
 import java.time.LocalDate;
 import java.util.UUID;
 
-@Table("users")
+@Table(PostgreSQLKeys.TABLE_NAME_USERS)
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
@@ -19,27 +20,27 @@ import java.util.UUID;
 public class UserEntity {
 
   @Id
-  @Column("user_id")
+  @Column(PostgreSQLKeys.COLUMN_NAME_USER_ID)
   private UUID userId;
-  @Column("first_name")
+  @Column(PostgreSQLKeys.COLUMN_NAME_USER_FIRST_NAME)
   private String firstName;
-  @Column("middle_name")
+  @Column(PostgreSQLKeys.COLUMN_NAME_USER_MIDDLE_NAME)
   private String middleName;
-  @Column("last_name")
+  @Column(PostgreSQLKeys.COLUMN_NAME_USER_LAST_NAME)
   private String lastName;
-  @Column("second_last_name")
+  @Column(PostgreSQLKeys.COLUMN_NAME_USER_SECOND_LAST_NAME)
   private String secondLastName;
   private String email;
   private String password;
-  @Column("identity_document")
+  @Column(PostgreSQLKeys.COLUMN_NAME_USER_IDENTITY_DOCUMENT)
   private Long identityDocument;
   private LocalDate birthdate;
   private String address;
-  @Column("number_phone")
+  @Column(PostgreSQLKeys.COLUMN_NAME_USER_NUMBER_PHONE)
   private Long numberPhone;
-  @Column("base_salary")
+  @Column(PostgreSQLKeys.COLUMN_NAME_USER_BASE_SALARY)
   private Long baseSalary;
-  @Column("rol_id")
+  @Column(PostgreSQLKeys.COLUMN_NAME_USER_ROLE_ID)
   private Long rolId;
 
 }

@@ -1,5 +1,6 @@
 package co.com.pragma.api.config;
 
+import co.com.pragma.api.constans.AuthenticationWebKeys;
 import co.com.pragma.api.jwt.JwtAuthenticationManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,8 +31,7 @@ public class SecurityContextRepository implements ServerSecurityContextRepositor
 
   @Override
   public Mono<SecurityContext> load(ServerWebExchange exchange) {
-    String token = exchange.getAttribute("token");
-    LOG.debug("Processing data: {}", token);
+    String token = exchange.getAttribute(AuthenticationWebKeys.TOKEN);
     return jwtAuthenticationManager.authenticate(new UsernamePasswordAuthenticationToken(token, token))
       .map(SecurityContextImpl::new);
   }

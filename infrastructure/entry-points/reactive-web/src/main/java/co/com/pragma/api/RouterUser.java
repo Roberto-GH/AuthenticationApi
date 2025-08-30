@@ -1,8 +1,9 @@
 package co.com.pragma.api;
 
 import co.com.pragma.api.config.UserPath;
-import co.com.pragma.api.dto.CreateUserDto;
-import co.com.pragma.api.dto.UserResponseDto;
+import co.com.pragma.api.constans.AuthenticationWebKeys;
+import co.com.pragma.api.dto.LoginDto;
+import co.com.pragma.model.user.Token;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -23,31 +24,30 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 public class RouterUser {
 
   private final UserPath userPath;
-  private final UserHandler userHandler;
 
-  public RouterUser(UserPath userPath, UserHandler userHandler) {
+  public RouterUser(UserPath userPath) {
     this.userPath = userPath;
-    this.userHandler = userHandler;
   }
 
   @RouterOperations({
     @RouterOperation(
-      path = "/api/v1/user",
+      path = AuthenticationWebKeys.OPEN_API_APPLICATION_PATH_LOGIN,
       method = RequestMethod.POST,
       beanClass = UserHandler.class,
-      beanMethod = "listenSaveUser",
+      beanMethod = AuthenticationWebKeys.OPEN_API_BEAN_METHOD_LOGIN,
       operation = @Operation(
-        operationId = "saveUser", responses = {
-          @ApiResponse(
-            responseCode = "200",
-            description = "Successful operation",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponseDto.class)))
-        },
-        requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = CreateUserDto.class)))
+        operationId = AuthenticationWebKeys.OPEN_API_OPERATION_ID_LOGIN, responses = {
+        @ApiResponse(
+          responseCode = AuthenticationWebKeys.OPEN_API_RESPONSE_CODE,
+          description = AuthenticationWebKeys.OPEN_API_DESCRIPTION_SUCCESS,
+          content = @Content(mediaType = AuthenticationWebKeys.OPEN_API_MEDIA_TYPE, schema = @Schema(implementation = Token.class)))
+      },
+        requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = LoginDto.class)))
       ))
   })
+
   @Bean
-  public RouterFunction<ServerResponse> routerFunctionUser() {
+  public RouterFunction<ServerResponse> routerFunctionUser(UserHandler userHandler) {
     return route(POST(userPath.getSignUp()), userHandler::listenSaveUser);
   }
 

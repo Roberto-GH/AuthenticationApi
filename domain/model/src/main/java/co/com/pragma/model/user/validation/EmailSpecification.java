@@ -1,4 +1,7 @@
-package co.com.pragma.model.validation;
+package co.com.pragma.model.user.validation;
+
+import co.com.pragma.model.user.exception.DomainValidationException;
+import co.com.pragma.model.user.exception.ErrorEnum;
 
 import java.util.regex.Pattern;
 
@@ -14,10 +17,10 @@ public class EmailSpecification implements Specification<String> {
   @Override
   public void validate(String candidate) throws DomainValidationException {
     if (candidate == null || candidate.trim().isEmpty()) {
-      throw new DomainValidationException("The email field '" + fieldName + "' cannot be empty.", 400);
+      throw new DomainValidationException(ErrorEnum.INVALID_USER_DATA, "The email field '" + fieldName + "' cannot be empty.");
     }
     if (!EMAIL_PATTERN.matcher(candidate).matches()) {
-      throw new DomainValidationException("The format of the field '" + fieldName + "' is not a valid email.", 400);
+      throw new DomainValidationException(ErrorEnum.INVALID_USER_DATA, "The format of the field '" + fieldName + "' is not a valid email.");
     }
   }
 

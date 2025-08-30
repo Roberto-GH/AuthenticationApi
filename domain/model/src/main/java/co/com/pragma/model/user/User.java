@@ -63,8 +63,6 @@ public class User {
     return password;
   }
 
-
-
   public Long getIdentityDocument() {
     return identityDocument;
   }
@@ -87,6 +85,10 @@ public class User {
 
   public Long getRolId() {
     return rolId;
+  }
+
+  public static Builder builder() {
+    return new Builder();
   }
 
   public static class Builder {
