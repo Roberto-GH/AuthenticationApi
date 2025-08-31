@@ -11,4 +11,6 @@ public interface UserControllerUseCase {
 
   Mono<Token> login(UserLogin userLogin);
 
+  Mono<User> findByEmail(String email);
+
 }

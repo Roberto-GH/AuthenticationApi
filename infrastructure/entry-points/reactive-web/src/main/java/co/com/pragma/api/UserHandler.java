@@ -56,4 +56,14 @@ public class UserHandler {
       .flatMap(token -> ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).bodyValue(token));
   }
 
+  @PreAuthorize("hasRole('ADMIN')")
+  public Mono<ServerResponse> listenFindByEmail(ServerRequest serverRequest) {
+    return Mono
+      .just(serverRequest.pathVariable("email"))
+      .flatMap(userControllerUseCase::findByEmail)
+      .map(userDtoMapper::toResponseDto)
+      .flatMap(responseUser -> ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).bodyValue(responseUser))
+      .switchIfEmpty(ServerResponse.noContent().build());
+  }
+
 }
