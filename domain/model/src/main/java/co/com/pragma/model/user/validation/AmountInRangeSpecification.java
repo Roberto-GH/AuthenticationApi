@@ -22,7 +22,7 @@ public class AmountInRangeSpecification implements Specification<Long> {
       throw new DomainValidationException(ErrorEnum.INVALID_USER_DATA, UserModelKeys.FIELD_NOT_NULL + fieldName);
     }
     if (candidate.compareTo(min) < 0 || candidate.compareTo(max) > 0) {
-      throw new DomainValidationException(ErrorEnum.INVALID_USER_DATA, UserModelKeys.FIELD_RANGE + fieldName + " - " + min + " and " + max + ".");
+      throw new DomainValidationException(ErrorEnum.INVALID_USER_DATA, UserModelKeys.FIELD_RANGE + " - " + min + " and " + max + ". =>" + fieldName);
     }
   }
 

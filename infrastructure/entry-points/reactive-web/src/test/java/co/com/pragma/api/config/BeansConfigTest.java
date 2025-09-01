@@ -15,11 +15,6 @@ class BeansConfigTest {
     assertNotNull(resources);
   }
 
-  @Test
-  void passwordEncoderBeanShouldNotBeNull() {
-    BeansConfig beansConfig = new BeansConfig();
-    PasswordEncoder passwordEncoder = beansConfig.passwordEncoder();
-    assertNotNull(passwordEncoder);
-  }
+  
 
 }

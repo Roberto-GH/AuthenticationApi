@@ -4,6 +4,8 @@ import co.com.pragma.api.dto.UserDetailsDto;
 import co.com.pragma.api.jwt.JwtProvider;
 import co.com.pragma.model.user.Token;
 import co.com.pragma.model.user.User;
+import co.com.pragma.model.user.exception.ErrorEnum;
+import co.com.pragma.model.user.exception.UserException;
 import co.com.pragma.model.user.gateways.UserRepository;
 import co.com.pragma.r2dbc.helper.ReactiveAdapterOperations;
 import org.reactivecommons.utils.ObjectMapper;
@@ -42,6 +44,7 @@ public class UserReactiveRepositoryAdapter extends ReactiveAdapterOperations<Use
   public Mono<Token> getToken(User user) {
     return roleReactiveRepositoryAdapter
       .findById(user.getRolId())
+      .switchIfEmpty(Mono.error(new UserException(ErrorEnum.INVALID_USER_DATA, "Role not found")))
       .map(role -> UserDetailsDto
         .builder()
         .username(user.getEmail())

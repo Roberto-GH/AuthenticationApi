@@ -167,15 +167,11 @@ class UserReactiveRepositoryAdapterTest {
 
   @Test
   void getToken_shouldReturnTokenOnSuccessfulLogin() {
-    UserLogin userLogin = new UserLogin(user.getEmail(), user.getPassword());
     Role role = Role.builder().id(1L).name("ADMIN").build();
     Token expectedToken = new Token("generatedToken");
-    when(repository.findByEmail(any())).thenReturn(Mono.just(userEntity));
-    when(mapper.mapBuilder(any(), any())).thenReturn(builder);
-    when(passwordEncoder.matches(any(), any())).thenReturn(true);
     when(roleReactiveRepositoryAdapter.findById(any())).thenReturn(Mono.just(role));
     when(jwtProvider.generateToken(any())).thenReturn("generatedToken");
-    Mono<Token> result = repositoryAdapter.getToken(userLogin);
+    Mono<Token> result = repositoryAdapter.getToken(user);
     StepVerifier.create(result)
       .assertNext(t -> assertAll(
         () -> assertEquals(expectedToken.getToken(), t.getToken())
@@ -184,33 +180,9 @@ class UserReactiveRepositoryAdapterTest {
   }
 
   @Test
-  void getToken_shouldThrowExceptionWhenUserNotFound() {
-    UserLogin userLogin = new UserLogin(user.getEmail(), user.getPassword());
-    when(repository.findByEmail(anyString())).thenReturn(Mono.empty());
-    Mono<Token> result = repositoryAdapter.getToken(userLogin);
-    StepVerifier.create(result)
-      .expectError(UserException.class)
-      .verify();
-  }
-
-  @Test
-  void getToken_shouldThrowExceptionWhenInvalidCredentials() {
-    UserLogin userLogin = new UserLogin(user.getEmail(), user.getPassword());
-    when(repository.findByEmail(anyString())).thenReturn(Mono.just(userEntity));
-    when(mapper.mapBuilder(any(), any())).thenReturn(builder);
-    when(passwordEncoder.matches(any(), any())).thenReturn(false);
-    Mono<Token> result = repositoryAdapter.getToken(userLogin);
-    StepVerifier.create(result)
-      .expectError(UserException.class)
-      .verify();
-  }
-
-  @Test
   void getToken_shouldThrowExceptionWhenRoleNotFound() {
-    UserLogin userLogin = new UserLogin(user.getEmail(), user.getPassword());
-    when(repository.findByEmail(anyString())).thenReturn(Mono.just(userEntity));
-    when(mapper.mapBuilder(any(), any())).thenReturn(builder);
-    Mono<Token> result = repositoryAdapter.getToken(userLogin);
+    when(roleReactiveRepositoryAdapter.findById(any())).thenReturn(Mono.empty());
+    Mono<Token> result = repositoryAdapter.getToken(user);
     StepVerifier.create(result)
       .expectError(UserException.class)
       .verify();

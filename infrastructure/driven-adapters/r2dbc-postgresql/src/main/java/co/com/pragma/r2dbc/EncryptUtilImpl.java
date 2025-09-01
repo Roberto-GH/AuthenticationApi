@@ -5,12 +5,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
-@Component
-public class EncrytpUtilImpl implements EncryptUtil {
+public class EncryptUtilImpl implements EncryptUtil {
 
   private final PasswordEncoder passwordEncoder;
 
-  public EncrytpUtilImpl(PasswordEncoder passwordEncoder) {
+  public EncryptUtilImpl(PasswordEncoder passwordEncoder) {
     this.passwordEncoder = passwordEncoder;
   }
 
