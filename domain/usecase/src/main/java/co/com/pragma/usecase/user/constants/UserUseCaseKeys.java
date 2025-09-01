@@ -14,5 +14,7 @@ public class UserUseCaseKeys {
   public static final String SALARY_RANGE_FIELD = "baseSalary";
   public static final Long SALARY_MIN = 0L;
   public static final Long SALARY_MAX = 15000000L;
+  public static final String INVALID_CREDENTIALS = "Invalid credentials";
+  public static final String NO_EXIST = "User does not exist with email ";
 
 }

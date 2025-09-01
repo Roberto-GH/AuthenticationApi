@@ -11,7 +11,7 @@ public class User {
   private final String lastName;
   private final String secondLastName;
   private final String email;
-  private final String password;
+  private String password;
   private final Long identityDocument;
   private final LocalDate birthdate;
   private final String address;
@@ -61,6 +61,10 @@ public class User {
 
   public String getPassword() {
     return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
   }
 
   public Long getIdentityDocument() {

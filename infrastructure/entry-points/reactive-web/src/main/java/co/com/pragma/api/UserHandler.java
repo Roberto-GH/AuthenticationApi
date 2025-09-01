@@ -4,13 +4,11 @@ import co.com.pragma.api.constans.AuthenticationWebKeys;
 import co.com.pragma.api.dto.CreateUserDto;
 import co.com.pragma.api.dto.LoginDto;
 import co.com.pragma.api.mapper.UserDtoMapper;
-import co.com.pragma.model.user.User;
 import co.com.pragma.model.user.exception.ErrorEnum;
 import co.com.pragma.model.user.exception.UserException;
 import co.com.pragma.usecase.user.adapters.UserControllerUseCase;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.reactive.TransactionalOperator;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -22,13 +20,11 @@ public class UserHandler {
 
   private final UserControllerUseCase userControllerUseCase;
   private final UserDtoMapper userDtoMapper;
-  private final PasswordEncoder passwordEncoder;
   private final TransactionalOperator transactionalOperator;
 
-  public UserHandler(UserControllerUseCase userControllerUseCase, UserDtoMapper userDtoMapper, PasswordEncoder passwordEncoder, TransactionalOperator transactionalOperator) {
+  public UserHandler(UserControllerUseCase userControllerUseCase, UserDtoMapper userDtoMapper, TransactionalOperator transactionalOperator) {
     this.userControllerUseCase = userControllerUseCase;
     this.userDtoMapper = userDtoMapper;
-    this.passwordEncoder = passwordEncoder;
     this.transactionalOperator = transactionalOperator;
   }
 
@@ -37,11 +33,7 @@ public class UserHandler {
     return serverRequest
       .bodyToMono(CreateUserDto.class)
       .switchIfEmpty(Mono.error(new UserException(ErrorEnum.INVALID_USER_DATA, AuthenticationWebKeys.ERROR_USER_DATA_REQUIRED)))
-      .map(dto -> {
-        User.Builder userBuilder = userDtoMapper.toModel(dto);
-        userBuilder.password(passwordEncoder.encode(dto.password()));
-        return userBuilder.build();
-      })
+      .map(dto -> userDtoMapper.toModel(dto).build())
       .flatMap(user -> userControllerUseCase.saveUser(user).as(transactionalOperator::transactional))
       .map(userDtoMapper::toResponseDto)
       .flatMap(reponseUser -> ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).bodyValue(reponseUser));

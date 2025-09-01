@@ -57,6 +57,7 @@ public class AuthenticationWebKeys {
   public static final String OPEN_API_BEAN_METHOD_AUTH = "listenLogin";
   public static final String OPEN_API_OPERATION_ID_AUTH = "login";
   public static final String EMAIL = "email";
+  public static final String WRITTING_JSON_ERROR = "{\"error\":\"Error writing JSON output\"}";
 
   public static final String[] ALLOWED_PATHS = new String[]{"/auth/**", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/webjars/swagger-ui/**"};
 
