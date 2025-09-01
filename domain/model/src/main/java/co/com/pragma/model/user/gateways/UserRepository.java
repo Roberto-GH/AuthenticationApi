@@ -11,6 +11,6 @@ public interface UserRepository {
 
   Mono<User> findByEmail(String email);
 
-  Mono<Token> getToken(UserLogin userLogin);
+  Mono<Token> getToken(User user);
 
 }
