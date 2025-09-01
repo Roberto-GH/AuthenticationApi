@@ -18,11 +18,13 @@ public class UserModelKeys {
   public static final String CODE_ERROR_US_002 = "US-002";
   public static final String CODE_ERROR_AUTH_001 = "AUTH-001";
   public static final String CODE_ERROR_AUTH_002 = "AUTH-002";
+  public static final String CODE_ERROR_AUTH_003 = "AUTH-003";
   public static final String CODE_ERROR_SYS_001 = "SYS-001";
   public static final String DEFAULT_MESSAGE_US_OO1 = "Authentication not found.";
   public static final String DEFAULT_MESSAGE_US_002 = "Invalid user data.";
   public static final String DEFAULT_MESSAGE_AUTH_001 = "Unauthorized access.";
   public static final String DEFAULT_MESSAGE_AUTH_002 = "The provided token is invalid or has expired.";
+  public static final String DEFAULT_MESSAGE_AUTH_003 = "Access denied.";
   public static final String DEFAULT_MESSAGE_SYS_001 = "Internal server error.";
   public static final int STATUS_400 = 400;
   public static final int STATUS_401 = 401;
