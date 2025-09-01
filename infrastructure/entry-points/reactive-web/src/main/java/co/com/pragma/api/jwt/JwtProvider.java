@@ -33,7 +33,7 @@ public class JwtProvider {
     return Jwts
       .builder()
       .subject(userDetails.getUsername())
-      .claim("roles", userDetails.getAuthorities())
+      .claim(AuthenticationWebKeys.JWT_ROLES, userDetails.getAuthorities())
       .issuedAt(new Date())
       .expiration(new Date(new Date().getTime() + expiration))
       .signWith(getKey(secret))
