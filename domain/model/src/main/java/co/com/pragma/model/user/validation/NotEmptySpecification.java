@@ -1,5 +1,6 @@
 package co.com.pragma.model.user.validation;
 
+import co.com.pragma.model.user.constants.UserModelKeys;
 import co.com.pragma.model.user.exception.DomainValidationException;
 import co.com.pragma.model.user.exception.ErrorEnum;
 
@@ -18,8 +19,8 @@ public class NotEmptySpecification implements Specification<String> {
   @Override
   public void validate(String candidate) throws DomainValidationException {
     if (candidate == null || candidate.trim().isEmpty()) {
-      LOG.severe("Validation failed: The field '" + fieldName + "' cannot be null or empty.");
-      throw new DomainValidationException(ErrorEnum.INVALID_USER_DATA, "The field '" + fieldName + "' cannot be null or empty.");
+      LOG.severe(UserModelKeys.FIELD_NOT_NULL_OR_EMPTY + fieldName);
+      throw new DomainValidationException(ErrorEnum.INVALID_USER_DATA, UserModelKeys.FIELD_NOT_NULL_OR_EMPTY + fieldName);
     }
   }
 

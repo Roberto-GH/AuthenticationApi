@@ -45,4 +45,4 @@ adapters:
 
 jwt:
   secret: "EstaEsUnaClaveSecretaMuyLargaParaQueSeaSeguraYCumplaConLosRequisitosDelAlgoritmo"
-  expiration: 600000
+  expiration: 3600000

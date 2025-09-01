@@ -1,12 +1,14 @@
 package co.com.pragma.model.user.exception;
 
+import co.com.pragma.model.user.constants.UserModelKeys;
+
 public enum ErrorEnum {
 
-  AUTHENTICATION_NOT_FOUND("US-001", "Authentication not found.", 404),
-  INVALID_USER_DATA("US-002", "Invalid user data.", 400),
-  UNAUTHORIZED_ACCESS("AUTH-001", "Unauthorized access.", 401),
-  INVALID_TOKEN("AUTH-002", "The provided token is invalid or has expired.", 403),
-  INTERNAL_SERVER_ERROR("SYS-001", "Internal server error.", 500);
+  AUTHENTICATION_NOT_FOUND(UserModelKeys.CODE_ERROR_US_001, UserModelKeys.DEFAULT_MESSAGE_US_OO1, UserModelKeys.STATUS_404),
+  INVALID_USER_DATA(UserModelKeys.CODE_ERROR_US_002, UserModelKeys.DEFAULT_MESSAGE_US_002, UserModelKeys.STATUS_400),
+  UNAUTHORIZED_ACCESS(UserModelKeys.CODE_ERROR_AUTH_001, UserModelKeys.DEFAULT_MESSAGE_AUTH_001, UserModelKeys.STATUS_401),
+  INVALID_TOKEN(UserModelKeys.CODE_ERROR_AUTH_002, UserModelKeys.DEFAULT_MESSAGE_AUTH_002, UserModelKeys.STATUS_403),
+  INTERNAL_SERVER_ERROR(UserModelKeys.CODE_ERROR_SYS_001, UserModelKeys.DEFAULT_MESSAGE_SYS_001, UserModelKeys.STATUS_500);
 
   private final String code;
   private final String defaultMessage;

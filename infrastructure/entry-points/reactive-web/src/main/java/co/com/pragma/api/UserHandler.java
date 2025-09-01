@@ -59,7 +59,7 @@ public class UserHandler {
   @PreAuthorize("hasRole('ADMIN')")
   public Mono<ServerResponse> listenFindByEmail(ServerRequest serverRequest) {
     return Mono
-      .just(serverRequest.pathVariable("email"))
+      .just(serverRequest.pathVariable(AuthenticationWebKeys.EMAIL))
       .flatMap(userControllerUseCase::findByEmail)
       .map(userDtoMapper::toResponseDto)
       .flatMap(responseUser -> ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).bodyValue(responseUser))

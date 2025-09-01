@@ -48,15 +48,15 @@ public class RouterUser {
       )
     ),
     @RouterOperation(
-      path = "/api/v1/user/{email}",
+      path = AuthenticationWebKeys.OPEN_API_APPLICATION_PATH_USER_BY_EMAIL,
       method = RequestMethod.GET,
       beanClass = UserHandler.class,
-      beanMethod = "listenFindByEmail",
-      operation = @Operation(operationId = "listenFindByEmail", responses = {
+      beanMethod = AuthenticationWebKeys.OPEN_API_BEAN_METHOD_USER_BY_EMAIL,
+      operation = @Operation(operationId = AuthenticationWebKeys.OPEN_API_OPERATION_ID_USER_BY_EMAIL, responses = {
         @ApiResponse(
-          responseCode = "200",
-          description = "Success",
-          content = @Content(mediaType = "application/json", schema = @Schema(implementation = User.class)))
+          responseCode = AuthenticationWebKeys.OPEN_API_RESPONSE_CODE,
+          description = AuthenticationWebKeys.OPEN_API_DESCRIPTION_SUCCESS,
+          content = @Content(mediaType = AuthenticationWebKeys.OPEN_API_MEDIA_TYPE, schema = @Schema(implementation = User.class)))
       })
     )
   })

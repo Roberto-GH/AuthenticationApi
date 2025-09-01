@@ -45,14 +45,19 @@ public class AuthenticationWebKeys {
   public static final String ERROR_USER_DATA_REQUIRED = "User data is required";
   public static final String ERROR_LOGIN_DATA_REQUIRED = "Login data is required";
   public static final String OPEN_API_APPLICATION_PATH_LOGIN = "/api/v1/user";
+  public static final String OPEN_API_APPLICATION_PATH_USER_BY_EMAIL = "/api/v1/user/{email}";
   public static final String OPEN_API_BEAN_METHOD_LOGIN = "listenSaveUser";
+  public static final String OPEN_API_BEAN_METHOD_USER_BY_EMAIL = "listenFindByEmail";
   public static final String OPEN_API_OPERATION_ID_LOGIN = "saveUser";
+  public static final String OPEN_API_OPERATION_ID_USER_BY_EMAIL = "listenFindByEmail";
   public static final String OPEN_API_RESPONSE_CODE = "200";
   public static final String OPEN_API_DESCRIPTION_SUCCESS = "Successful operation";
   public static final String OPEN_API_MEDIA_TYPE = "application/json";
   public static final String OPEN_API_APPLICATION_PATH_AUTH = "/auth/v1/login";
   public static final String OPEN_API_BEAN_METHOD_AUTH = "listenLogin";
   public static final String OPEN_API_OPERATION_ID_AUTH = "login";
+  public static final String EMAIL = "email";
+
   public static final String[] ALLOWED_PATHS = new String[]{"/auth/**", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/webjars/swagger-ui/**"};
 
   @Getter
