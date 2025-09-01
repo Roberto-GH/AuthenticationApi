@@ -8,6 +8,7 @@ import co.com.pragma.model.user.UserLogin;
 import co.com.pragma.model.user.exception.ErrorEnum;
 import co.com.pragma.model.user.exception.UserException;
 import co.com.pragma.model.user.gateways.UserRepository;
+import co.com.pragma.r2dbc.constants.PostgreSQLKeys;
 import co.com.pragma.r2dbc.helper.ReactiveAdapterOperations;
 import org.reactivecommons.utils.ObjectMapper;
 import org.springframework.http.HttpStatus;
@@ -49,9 +50,9 @@ public class UserReactiveRepositoryAdapter extends ReactiveAdapterOperations<Use
   public Mono<Token> getToken(UserLogin userLogin) {
     return this
       .findByEmail(userLogin.getEmail())
-      .switchIfEmpty(Mono.error(new UserException(ErrorEnum.INVALID_USER_DATA, "User with email " + userLogin.getEmail() + " does not exist")))
+      .switchIfEmpty(Mono.error(new UserException(ErrorEnum.INVALID_USER_DATA, PostgreSQLKeys.NO_EXIST + userLogin.getEmail())))
       .filter(user -> passwordEncoder.matches(userLogin.getPassword(), user.getPassword()))
-      .switchIfEmpty(Mono.error(new UserException(ErrorEnum.INVALID_USER_DATA, "Invalid credentials")))
+      .switchIfEmpty(Mono.error(new UserException(ErrorEnum.INVALID_USER_DATA, PostgreSQLKeys.INVALID_CREDENTIALS)))
       .flatMap(user -> roleReactiveRepositoryAdapter
         .findById(user.getRolId())
         .map(role -> UserDetailsDto.builder()

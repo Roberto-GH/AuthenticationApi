@@ -54,6 +54,14 @@ public class UserUseCaseTest {
   }
 
   @Test
+  public void tesFindByEmail_Success() {
+    when(userRepository.findByEmail(any(String.class))).thenReturn(Mono.just(user));
+    StepVerifier.create(userUseCase.findByEmail("john.doe@example.com"))
+      .expectNext(user)
+      .verifyComplete();
+  }
+
+  @Test
   public void testSaveUser_EmailExists() {
     when(userRepository.findByEmail(any(String.class))).thenReturn(Mono.just(user));
     when(userRepository.saveUser(any(User.class))).thenReturn(Mono.just(user));

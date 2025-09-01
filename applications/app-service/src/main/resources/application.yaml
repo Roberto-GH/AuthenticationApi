@@ -29,6 +29,7 @@ routes:
   user:
     paths:
       signUp: "/api/v1/user"
+      findByEmail: "/api/v1/user/{email}"
   auth:
     paths:
       login: "/auth/v1/login"
@@ -44,4 +45,4 @@ adapters:
 
 jwt:
   secret: "EstaEsUnaClaveSecretaMuyLargaParaQueSeaSeguraYCumplaConLosRequisitosDelAlgoritmo"
-  expiration: 600000
+  expiration: 3600000

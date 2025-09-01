@@ -1,10 +1,5 @@
 package co.com.pragma.usecase.user.constants;
 
-import co.com.pragma.model.user.validation.AmountInRangeSpecification;
-import co.com.pragma.model.user.validation.EmailSpecification;
-import co.com.pragma.model.user.validation.NotEmptySpecification;
-import co.com.pragma.model.user.validation.Specification;
-
 public class UserUseCaseKeys {
 
   private UserUseCaseKeys() throws InstantiationException {

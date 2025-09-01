@@ -30,6 +30,7 @@ class RouterUserTest {
   @BeforeEach
   void setUp() {
     when(userPath.getSignUp()).thenReturn("/api/v1/user");
+    when(userPath.getFindByEmail()).thenReturn("/api/v1/user/{email}");
     when(handler.listenSaveUser(any())).thenReturn(ServerResponse.ok().build());
     RouterFunction<ServerResponse> routerFunction = routerRest.routerFunctionUser(handler);
     webTestClient = WebTestClient.bindToRouterFunction(routerFunction).build();

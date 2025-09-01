@@ -22,5 +22,7 @@ public class PostgreSQLKeys {
   public static final String COLUMN_NAME_USER_NUMBER_PHONE = "number_phone";
   public static final String COLUMN_NAME_USER_BASE_SALARY = "base_salary";
   public static final String COLUMN_NAME_USER_ROLE_ID = "rol_id";
+  public static final String INVALID_CREDENTIALS = "Invalid credentials";
+  public static final String NO_EXIST = "User does not exist with email ";
 
 }

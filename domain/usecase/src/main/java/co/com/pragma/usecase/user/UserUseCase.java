@@ -49,7 +49,12 @@ public class  UserUseCase implements UserControllerUseCase {
     }).flatMap(userRepository::getToken);
   }
 
-  public Mono<Void> assertUserEmailNotExists(String email) {
+    @Override
+    public Mono<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    public Mono<Void> assertUserEmailNotExists(String email) {
     return userRepository.findByEmail(email)
       .flatMap(user -> Mono.error(new UserException(ErrorEnum.INVALID_USER_DATA, UserUseCaseKeys.USER_VALIDATED_EMAIL + email)))
       .then();

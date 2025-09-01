@@ -36,6 +36,22 @@ class UserDtoMapperTest {
   }
 
   @Test
+  void toUserLogin_shouldMapLoginDtoToUserLogin() {
+    LoginDto login = new LoginDto("email@email.com", "123456");
+    UserLogin dto = mapper.toUserLogin(login);
+    assertNotNull(dto);
+    assertAll(
+      () -> assertEquals(login.email(), dto.getEmail())
+    );
+  }
+
+  @Test
+  void toUserLogin_shouldMapLoginDtoToNull() {
+    UserLogin dto = mapper.toUserLogin(null);
+    assertNull(dto);
+  }
+
+  @Test
   void toBuilder_shouldMapCreateApplicationDtoToApplicationBuilder() {
     CreateUserDto createDto = new CreateUserDto(
       "firstName",
