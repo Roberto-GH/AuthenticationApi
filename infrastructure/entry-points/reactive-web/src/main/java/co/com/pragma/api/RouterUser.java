@@ -2,9 +2,8 @@ package co.com.pragma.api;
 
 import co.com.pragma.api.config.UserPath;
 import co.com.pragma.api.constans.AuthenticationWebKeys;
-import co.com.pragma.api.dto.LoginDto;
-import co.com.pragma.model.user.Token;
-import co.com.pragma.model.user.User;
+import co.com.pragma.api.dto.CreateUserDto;
+import co.com.pragma.api.dto.UserResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -33,18 +32,18 @@ public class RouterUser {
 
   @RouterOperations({
     @RouterOperation(
-      path = AuthenticationWebKeys.OPEN_API_APPLICATION_PATH_LOGIN,
+      path = AuthenticationWebKeys.OPEN_API_APPLICATION_PATH_USER,
       method = RequestMethod.POST,
       beanClass = UserHandler.class,
-      beanMethod = AuthenticationWebKeys.OPEN_API_BEAN_METHOD_LOGIN,
+      beanMethod = AuthenticationWebKeys.OPEN_API_BEAN_METHOD_USER,
       operation = @Operation(
-        operationId = AuthenticationWebKeys.OPEN_API_OPERATION_ID_LOGIN, responses = {
+        operationId = AuthenticationWebKeys.OPEN_API_OPERATION_ID_USER, responses = {
         @ApiResponse(
           responseCode = AuthenticationWebKeys.OPEN_API_RESPONSE_CODE,
           description = AuthenticationWebKeys.OPEN_API_DESCRIPTION_SUCCESS,
-          content = @Content(mediaType = AuthenticationWebKeys.OPEN_API_MEDIA_TYPE, schema = @Schema(implementation = Token.class)))
+          content = @Content(mediaType = AuthenticationWebKeys.OPEN_API_MEDIA_TYPE, schema = @Schema(implementation = UserResponseDto.class)))
       },
-        requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = LoginDto.class)))
+        requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = CreateUserDto.class)))
       )
     ),
     @RouterOperation(
@@ -56,7 +55,7 @@ public class RouterUser {
         @ApiResponse(
           responseCode = AuthenticationWebKeys.OPEN_API_RESPONSE_CODE,
           description = AuthenticationWebKeys.OPEN_API_DESCRIPTION_SUCCESS,
-          content = @Content(mediaType = AuthenticationWebKeys.OPEN_API_MEDIA_TYPE, schema = @Schema(implementation = User.class)))
+          content = @Content(mediaType = AuthenticationWebKeys.OPEN_API_MEDIA_TYPE, schema = @Schema(implementation = UserResponseDto.class)))
       })
     )
   })
