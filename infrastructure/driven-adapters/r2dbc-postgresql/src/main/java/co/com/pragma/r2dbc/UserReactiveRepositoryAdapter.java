@@ -7,6 +7,7 @@ import co.com.pragma.model.user.User;
 import co.com.pragma.model.user.exception.ErrorEnum;
 import co.com.pragma.model.user.exception.UserException;
 import co.com.pragma.model.user.gateways.UserRepository;
+import co.com.pragma.r2dbc.constants.PostgreSQLKeys;
 import co.com.pragma.r2dbc.helper.ReactiveAdapterOperations;
 import org.reactivecommons.utils.ObjectMapper;
 import org.springframework.stereotype.Repository;
@@ -44,12 +45,12 @@ public class UserReactiveRepositoryAdapter extends ReactiveAdapterOperations<Use
   public Mono<Token> getToken(User user) {
     return roleReactiveRepositoryAdapter
       .findById(user.getRolId())
-      .switchIfEmpty(Mono.error(new UserException(ErrorEnum.INVALID_USER_DATA, "Role not found")))
+      .switchIfEmpty(Mono.error(new UserException(ErrorEnum.INVALID_USER_DATA, PostgreSQLKeys.ROLE_NOT_FOUND)))
       .map(role -> UserDetailsDto
         .builder()
         .username(user.getEmail())
         .password(user.getPassword())
-        .roles("ROLE_" + role.getName())
+        .roles(PostgreSQLKeys.ROLE_PREFIX + role.getName())
         .build())
       .map(details -> new Token(jwtProvider.generateToken(details)));
   }
