@@ -23,7 +23,7 @@ management:
         enabled: true
 
 cors:
-  allowed-origins: "http://localhost:4200,http://localhost:8080"
+  allowed-origins: "${CORS}"
 
 routes:
   user:
@@ -36,13 +36,13 @@ routes:
 
 adapters:
   r2dbc:
-    host: "localhost"
-    port: 5432
-    database: "users"
+    host: "${DB_HOST}"
+    port: ${DB_PORT}
+    database: "${DB_NAME}"
     schema: "public"
-    username: "postgres"
-    password: "postgres"
+    username: "${DB_USER}"
+    password: "${DB_PASSWORD}"
 
 jwt:
-  secret: "EstaEsUnaClaveSecretaMuyLargaParaQueSeaSeguraYCumplaConLosRequisitosDelAlgoritmo"
-  expiration: 3600000
+  secret: "${JWT_SECRET}"
+  expiration: ${JWT_EXPIRATION}
