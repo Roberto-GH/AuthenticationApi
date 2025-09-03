@@ -24,5 +24,7 @@ public class PostgreSQLKeys {
   public static final String COLUMN_NAME_USER_ROLE_ID = "rol_id";
   public static final String INVALID_CREDENTIALS = "Invalid credentials";
   public static final String NO_EXIST = "User does not exist with email ";
+  public static final String ROLE_NOT_FOUND = "Role not found";
+  public static final String ROLE_PREFIX = "ROLE_";
 
 }
