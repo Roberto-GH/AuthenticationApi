@@ -16,8 +16,6 @@ import reactor.core.publisher.Mono;
 @Component
 public class SecurityContextRepository implements ServerSecurityContextRepository {
 
-  private static final Logger LOG = LoggerFactory.getLogger(SecurityContextRepository.class);
-
   private final JwtAuthenticationManager jwtAuthenticationManager;
 
   public SecurityContextRepository(JwtAuthenticationManager jwtAuthenticationManager) {
