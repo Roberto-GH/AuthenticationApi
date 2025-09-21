@@ -52,7 +52,7 @@ public class UserReactiveRepositoryAdapter extends ReactiveAdapterOperations<Use
         .password(user.getPassword())
         .roles(PostgreSQLKeys.ROLE_PREFIX + role.getName())
         .build())
-      .map(details -> new Token(jwtProvider.generateToken(details)));
+      .flatMap(details -> jwtProvider.generateToken(details).map(Token::new));
   }
 
 }

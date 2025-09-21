@@ -5,26 +5,25 @@ spring:
     name: "AuthenticationApi"
   devtools:
     add-properties: false
-
 logging:
   level:
     org:
       springframework:
-        web: DEBUG
-
+        web: "DEBUG"
+      boot:
+        actuate: TRACE
 management:
   endpoints:
     web:
       exposure:
-        include: "health,prometheus"
+        include: "health,prometheus,info"
   endpoint:
     health:
       probes:
         enabled: true
-
+      show-details: "always"
 cors:
   allowed-origins: "${CORS}"
-
 routes:
   user:
     paths:
@@ -33,16 +32,16 @@ routes:
   auth:
     paths:
       login: "/auth/v1/login"
-
 adapters:
   r2dbc:
     host: "${DB_HOST}"
-    port: ${DB_PORT}
+    port: "${DB_PORT}"
     database: "${DB_NAME}"
     schema: "public"
-    username: "${DB_USER}"
-    password: "${DB_PASSWORD}"
+    #username: "${DB_USER}"
+    #password: "${DB_PASSWORD}"
 
-jwt:
-  secret: "${JWT_SECRET}"
-  expiration: ${JWT_EXPIRATION}
+aws:
+  region: "us-east-1"
+  dbSecretName: "${DB_SECRET_NAME}"
+  jwtSecretName: "${JWT_SECRET_NAME}"

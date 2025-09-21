@@ -1,6 +1,11 @@
 apply plugin: 'org.springframework.boot'
 
 dependencies {
+  implementation platform('software.amazon.awssdk:bom:2.32.13')
+  implementation 'software.amazon.awssdk:regions'
+  implementation 'software.amazon.awssdk:secretsmanager'
+	implementation 'com.github.bancolombia:aws-secrets-manager-async:4.4.34'
+	implementation project(':metrics')
   implementation project(':reactive-web')
   implementation 'org.reactivecommons.utils:object-mapper:0.1.0'
   implementation project(':r2dbc-postgresql')
@@ -9,6 +14,7 @@ dependencies {
   implementation 'org.springframework.boot:spring-boot-starter'
   implementation 'org.springframework.boot:spring-boot-starter-security'
   runtimeOnly('org.springframework.boot:spring-boot-devtools')
+
   testImplementation 'com.tngtech.archunit:archunit:1.4.1'
   testImplementation 'com.fasterxml.jackson.core:jackson-databind'
 }

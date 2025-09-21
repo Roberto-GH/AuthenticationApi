@@ -7,6 +7,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.postgresql:r2dbc-postgresql'
     implementation 'org.reactivecommons.utils:object-mapper-api:0.1.0'
+    implementation 'com.github.bancolombia:aws-secrets-manager-async:4.4.34'
 
     testImplementation 'org.reactivecommons.utils:object-mapper:0.1.0'
 }
