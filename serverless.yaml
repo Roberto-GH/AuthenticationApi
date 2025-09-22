@@ -17,6 +17,8 @@ custom:
   ecrRepoName: ${ssm:/creadiya/auth-api/ecr-repo-name}
   jwtSecretSsmPath: /creadiya/shared/jwt-secret-arn/${self:provider.stage}
   jwtSecretArnValue: ${ssm:${self:custom.jwtSecretSsmPath}}
+  
+  authApiLoginUrlSsmPath: /creadiya/authentication-api/login-url/${self:provider.stage}
 
 package:
   individually: true
@@ -208,6 +210,13 @@ resources:
         DeleteAutomatedBackups: true
         DeletionProtection: false    
 
+    AuthApiLoginUrlSsm:
+      Type: AWS::SSM::Parameter
+      Properties:
+        Name: ${self:custom.authApiLoginUrlSsmPath}
+        Type: String
+        Value: !Sub "${HttpApi.ApiEndpoint}/auth/v1/login"    
+
     # ------------------------------------------------------------
     # IAM Roles
     # ------------------------------------------------------------
@@ -243,7 +252,9 @@ resources:
                     - ${self:custom.jwtSecretArnValue}
                 - Effect: Allow
                   Action: ssm:GetParameter
-                  Resource: !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter${self:custom.jwtSecretSsmPath}"
+                  Resource:
+                    - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter${self:custom.jwtSecretSsmPath}"
+                    - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter${self:custom.authApiLoginUrlSsmPath}"
                 - Effect: Allow
                   Action:
                     - ssmmessages:CreateControlChannel
