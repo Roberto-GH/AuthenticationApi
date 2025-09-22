@@ -1,0 +1,8 @@
+dependencies {
+    implementation 'org.springframework:spring-context'
+    implementation 'io.micrometer:micrometer-core'
+    implementation 'software.amazon.awssdk:metrics-spi'
+
+    // Añadir estas líneas para AWS SDK v2
+    implementation platform('software.amazon.awssdk:bom:2.20.160') // Usar la última versión estable o una compatible
+}

@@ -21,8 +21,9 @@ public class JwtFilter implements WebFilter {
     ServerHttpRequest request = exchange.getRequest();
     String path = request.getPath().value();
     if (path.contains(AuthenticationWebKeys.STRING_AUTH) || path.contains(AuthenticationWebKeys.STRING_SWAGGER) || path.contains(AuthenticationWebKeys.STRING_DOCS) ||
-        path.contains(AuthenticationWebKeys.STRING_WEBJARS))
+        path.contains(AuthenticationWebKeys.STRING_WEBJARS) || path.contains(AuthenticationWebKeys.STRING_ACTUATOR)) {
       return chain.filter(exchange);
+    }
     String auth = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
     if(auth == null)
       return Mono.error(new AuthenticationApiException(ErrorEnum.INVALID_TOKEN, AuthenticationWebKeys.NO_TOKEN));
