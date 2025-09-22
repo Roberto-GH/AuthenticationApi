@@ -215,7 +215,7 @@ resources:
       Properties:
         Name: ${self:custom.authApiLoginUrlSsmPath}
         Type: String
-        Value: !Sub "${HttpApi.ApiEndpoint}/auth/v1/login"    
+        Value: !Sub "${HttpApi.ApiEndpoint}"
 
     # ------------------------------------------------------------
     # IAM Roles
